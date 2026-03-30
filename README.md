@@ -164,11 +164,20 @@ openclaw dashboard --no-open
 - 自然文だけの入力は、モデルが Skill を使わずに直接返答することがある
 - `大阪城の地図URLを出して` のような文は、意図としては一致していても Skill 実行の保証にはならない
 - Skill 実行を確実に確認したい場合は `/skill 01-run-python ...` を使う
+- WebDashboard で `github-copilot / gpt-5-mini` を使い、thinking が `off` 相当の経路に入ると `400 {"message":"","code":"invalid_request_body"}` になることがある
+- この場合は Skill 実装の失敗ではなく、Control UI からモデルへのリクエスト経路の問題なので、新しいセッションで再試行し、thinking を `off` にしない
+- すぐ確認したい場合は CLI で `openclaw agent --thinking low ...` を使う
 
 Web の Chat に入力する代表例:
 
 ```text
 /skill 01-run-python 東京駅を検索して。生のJSONとして query と map_url を返して。
+```
+
+`02-con-sitl` の確認例:
+
+```text
+/skill 02-con-sitl trigkeys5-wsl に ping が通るか確認して。JSONをそのまま返して。
 ```
 
 確認できたと言える条件:
