@@ -67,4 +67,7 @@ python3 skills/01-run-python/scripts/place_to_gmap.py 東京駅
 - Google Maps の検索 URL 形式として `api=1` を使う
 - URL エンコードは同梱の Python スクリプトが行う
 - 必要な依存関係は Python 標準ライブラリのみ
+- 実行ログは標準エラーに JSON Lines で出力する
+- 既定の保存先は `~/.openclaw/workspace/logs/skills/01-run-python.jsonl`
+- `tail -f ~/.openclaw/workspace/logs/skills/01-run-python.jsonl` で継続監視できる
 - 実処理は `scripts/place_to_gmap.py` が担当する

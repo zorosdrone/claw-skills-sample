@@ -1,27 +1,32 @@
 # claw-skills-sample
-OpenClawのSKILL学習用プロジェクト。
-目標：日本語でのArdupilotSITL上のドローンに指示を出せる事
 
-サンプル一覧:
-- skills/01-run-python: 地名から Google Maps 検索 URL を返す最小 SKILL サンプル
+OpenClaw の Skill 学習用プロジェクトです。
+目標は、日本語で使える Skill を最小構成で作成し、配置、認識確認、テストまで一通り試せる状態にすることです。
 
-参考プロジェクト
-・https://github.com/zorosdrone/claw-sitl-ops
+## このリポジトリ内の文書の役割
 
+- この README: リポジトリ全体の概要、共通の配置方法、認識確認、テスト手順
+- [skills/01-run-python/README.md](skills/01-run-python/README.md): `01-run-python` サンプルの概要、入出力、実行例
+- [skills/01-run-python/SKILL.md](skills/01-run-python/SKILL.md): OpenClaw が実行時に参照する Skill 定義本体
+- [docs/01-run-python.md](docs/01-run-python.md): `01-run-python` を生成するための TUI プロンプト例と設計メモ
+
+## サンプル一覧
+
+- [skills/01-run-python/README.md](skills/01-run-python/README.md): 地名や施設名から Google Maps の検索 URL を返す最小 Skill サンプル
+
+参考プロジェクト:
+
+- https://github.com/zorosdrone/claw-sitl-ops
 
 前提:
+
 - XServer 無料VPS 上で OpenClaw を常駐
 - 最新版 OpenClaw を利用
 - Tailscale 稼働済み
 - Discord 連携も想定
-- ArdupilotSITLはWindowsPCのWSLで動かす
-- WindowsPC/WSL側にもTailScale導入済み
-- このプロジェクトはOpenClawが動いているマシンで開発されている
-
-## 開発、検証環境構築
-
-このリポジトリは、OpenClaw で利用する Skill の最小構成を確認するためのサンプル集です。
-各 Skill は `skills/` 配下に配置し、`SKILL.md` と必要なスクリプト群をセットで管理します。
+- ArdupilotSITL は Windows PC の WSL で動かす
+- Windows PC / WSL 側にも Tailscale 導入済み
+- このプロジェクトは OpenClaw が動いているマシンで開発されている
 
 ## Skill の配置方法
 
@@ -31,29 +36,21 @@ OpenClaw で Skill を認識させるには、各 Skill を `skills/<skill_name>
 
 ```text
 skills/
-	01-run-python/
-		README.md
-		SKILL.md
-		scripts/
-			place_to_gmap.py
+  01-run-python/
+    README.md
+    SKILL.md
+    scripts/
+      place_to_gmap.py
 ```
 
 配置時の考え方:
 
 - `skills/<skill_name>/SKILL.md` に Skill の説明、用途、実行方法を書く
 - 実際の処理は `skills/<skill_name>/scripts/` 配下に置く
-- `SKILL.md` の frontmatter は Skill の識別に使うため、内容を明確に書く
-- 新しい Skill を追加するときも同じ構成を踏襲すると管理しやすい
+- OpenClaw CLI で参照する Skill 名は `SKILL.md` の frontmatter の `name` を使う
+- フォルダ名と `name` は一致させると管理しやすい
 
-現在のサンプル:
-
-- `skills/01-run-python`: 地名や施設名から Google Maps 検索 URL を返す Skill
-
-## Skill 配置後に有効であることを確認する手順
-
-Skill を `skills/` 配下に配置した後は、OpenClaw から認識されていることを確認します。
-OpenClaw CLI で参照する Skill 名は、ディレクトリ名ではなく `SKILL.md` の frontmatter にある `name` を使います。
-このサンプルではディレクトリ名と Skill 名をどちらも `01-run-python` に揃えています。
+## Skill 配置後の認識確認
 
 1. 利用可能な Skill 一覧を表示する
 
@@ -61,21 +58,11 @@ OpenClaw CLI で参照する Skill 名は、ディレクトリ名ではなく `S
 openclaw skills list
 ```
 
-確認ポイント:
-
-- `01-run-python` が一覧に表示されること
-- Skill 名や説明が崩れていないこと
-
 2. 対象 Skill の詳細を確認する
 
 ```bash
 openclaw skills info 01-run-python
 ```
-
-確認ポイント:
-
-- 対象 Skill の情報が取得できること
-- `SKILL.md` が正しく読まれていること
 
 3. Skill の readiness を確認する
 
@@ -91,8 +78,9 @@ openclaw skills check --verbose
 
 確認ポイント:
 
-- 対象 Skill が ready として扱われること
-- 足りない要件があれば `--verbose` で内容を確認できること
+- `01-run-python` が一覧に表示されること
+- `skills info` で `SKILL.md` の情報が取得できること
+- `skills check` で ready として扱われること
 
 表示されない場合の確認項目:
 
@@ -100,13 +88,8 @@ openclaw skills check --verbose
 - `SKILL.md` がその直下にあるか
 - `SKILL.md` の frontmatter が壊れていないか
 - `name` や説明の記述に不整合がないか
-- `openclaw skills info` にはディレクトリ名ではなく frontmatter の `name` を渡しているか
 
-一覧で確認できた後に、TUI や WebDashboard から実際に呼び出して動作確認へ進みます。
-
-## テスト方法
-
-このプロジェクトでは、少なくとも以下の 4 通りで検証できます。
+## 共通テスト手順
 
 事前条件:
 
@@ -123,128 +106,108 @@ openclaw gateway
 openclaw gateway --force
 ```
 
-## 1. コマンドラインからのテスト
+### 1. コマンドラインからのテスト
 
 まずはスクリプト単体で正しい JSON が返ることを確認します。
-
-実行例:
+サンプル固有の入出力は [skills/01-run-python/README.md](skills/01-run-python/README.md) を参照してください。
 
 ```bash
 python3 skills/01-run-python/scripts/place_to_gmap.py --query "東京駅"
 ```
 
-期待される出力例:
+確認観点:
 
-```json
-{"ok": true, "query": "東京駅", "map_url": "https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%A7%85"}
-```
+- `ok`, `query`, `map_url` の 3 つが返ること
+- `query` が入力値と一致すること
+- `map_url` が Google Maps 検索 URL 形式になっていること
+- 仕様にない `label`, `center`, `zoom` などを返していないこと
 
-確認ポイント:
+補足:
 
-- `ok` が `true` であること
-- `query` に入力した文字列が入ること
-- `map_url` に Google Maps の検索 URL が入ること
+- このサンプルの動作確認は「Google Maps で期待した候補が開くか」ではなく、「スクリプトが決めた JSON 契約どおりに返すか」を見る
+- URL が開けるだけでは、Skill の実装どおりに動いた確認としては不十分
+- 実行ログは `~/.openclaw/workspace/logs/skills/01-run-python.jsonl` に追記される
+- 運用中に確認するときは `tail -f ~/.openclaw/workspace/logs/skills/01-run-python.jsonl` を使う
 
-未入力時の確認例:
-
-```bash
-python3 skills/01-run-python/scripts/place_to_gmap.py
-```
-
-この場合はエラー JSON が返ることを確認します。
-
-## 2. TUI からのテスト
-
-OpenClaw の TUI から、Skill が自然言語の依頼に応答できるか確認します。
-
-起動方法:
+### 2. TUI からのテスト
 
 ```bash
 openclaw tui
 ```
 
-補足:
-
-- 既定では現在の Gateway 設定に接続する
-- 返信を実際のチャネルへ配送したい構成では `--deliver` を付けて起動できる
-- 初回接続時に Gateway が見つからない場合は、先に `openclaw gateway` を起動する
-
-確認例:
-
-- 東京駅を Google Maps で開きたい
-- 大阪城の地図 URL を出して
-- 札幌駅 北口を Google Map で検索して
-
 確認ポイント:
 
 - `01-run-python` の Skill が選ばれること
 - URL だけ、または簡潔な説明つきで返答されること
-- 地図候補を確定したとは言わず、検索 URL を返していること
 
-## 3. WebDashboard からのテスト
-
-OpenClaw の WebDashboard から同様の依頼を送り、Web UI 上でも同じ挙動になることを確認します。
-
-起動方法:
+### 3. WebDashboard からのテスト
 
 ```bash
 openclaw dashboard
 ```
 
-ブラウザを自動で開かず、URL だけ確認したい場合:
+URL だけ確認したい場合:
 
 ```bash
 openclaw dashboard --no-open
 ```
 
-補足:
-
-- `openclaw dashboard` は現在のトークンで Control UI を開く
-- 事前に Gateway が起動している必要がある
-
-手順:
-
-1. WebDashboard にアクセスする
-2. OpenClaw の入力欄に場所検索の依頼を入れる
-3. 返答内容に Google Maps の検索 URL が含まれることを確認する
-
-確認例:
-
-- 東京駅を Google Maps で開きたい
-- 新宿駅南口の地図を出して
-
 確認ポイント:
 
 - TUI と同じ意図で Skill が呼ばれること
-- JSON や内部情報ではなく、利用しやすい形で結果が返ること
 - ブラウザ上でリンクを開けること
+- チャット応答が補足情報を付ける場合でも、元の Skill 仕様は `query` と `map_url` を返すだけであることを意識すること
 
-## 4. Discord からのテスト
+Web の Chat に入力する例:
 
-Discord 連携の設定は完了済みである前提で、実際のチャット経由でも同じ結果になることを確認します。
+```text
+/skill 01-run-python 東京駅
+```
 
-手順:
+または:
 
-1. Discord の OpenClaw 連携チャンネルを開く
-2. 場所検索の依頼を送る
-3. 返答に Google Maps の URL が含まれることを確認する
+```text
+/skill 01-run-python 東京をGoogleマップで見たい
+```
 
-確認例:
+確認できたと言える条件:
 
-- 東京駅を Google Maps で開きたい
-- らりるれろを Google Maps で検索して
+- `01-run-python` を明示して呼んでいること
+- 返答の中に `query` と `map_url` が含まれること
+- `map_url` が `https://www.google.com/maps/search/?api=1&query=...` の形式になっていること
+- `query` が入力した地名に対応していること
+
+「Skill と Script が起動した」とは言い切れない例:
+
+- 単に Google Maps のリンクだけが自然文で返る
+- `label`, `center`, `zoom` など仕様外の情報だけが目立つ
+- `query` と `map_url` が見えず、チャットが要約だけ返している
+
+判定を明確にしたい場合の入力例:
+
+```text
+/skill 01-run-python 東京駅を検索して。生のJSONとして query と map_url を返して。
+```
+
+この入力を使う理由:
+
+- Skill 名を固定できる
+- JSON の確認対象を `query` と `map_url` に絞れる
+- UI 側の補足整形が入っても、仕様どおりの返答か見分けやすい
+
+### 4. Discord からのテスト
+
+Discord 連携の設定は完了済みである前提です。
 
 確認ポイント:
 
 - Discord 上でも応答が冗長になりすぎないこと
-- 不自然な語でも検索 URL が生成されること
-- 空入力や曖昧な入力時は、再入力を促すこと
+- 空入力や曖昧な入力時は再入力を促せること
 
-## 検証時の見方
+## 補足
 
 この Skill は「地名を確定する」ものではなく、「Google Maps の検索 URL を返す」ものです。
-そのため検証では、検索候補の正確性ではなく、次の点を主に見ます。
+サンプルの具体的な用途と出力例は [skills/01-run-python/README.md](skills/01-run-python/README.md)、生成プロンプト例は [docs/01-run-python.md](docs/01-run-python.md) を参照してください。
 
-- 入力文字列がそのまま検索語として扱われること
-- Google Maps の URL が正しい形式で組み立てられていること
-- 失敗時に JSON または短い説明で再入力を促せること
+特に WebDashboard やチャット経由の返答は、UI 側や会話応答で補足整形されることがあります。
+そのため、厳密な動作確認はスクリプトの生出力 JSON を基準に行うのが安全です。
