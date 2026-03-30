@@ -14,10 +14,6 @@ OpenClaw の Skill 学習用プロジェクトです。
 
 - [skills/01-run-python/README.md](skills/01-run-python/README.md): 地名や施設名から Google Maps の検索 URL を返す最小 Skill サンプル
 
-参考プロジェクト:
-
-- https://github.com/zorosdrone/claw-sitl-ops
-
 前提:
 
 - XServer 無料VPS 上で OpenClaw を常駐
@@ -60,12 +56,6 @@ scripts/sync_skill_to_workspace.sh 01-run-python
 
 リポジトリ側で `SKILL.md` や `scripts/` を変更した後は、テスト前に必ずこの同期を再実行します。
 
-同期後にログファイルを確認する例:
-
-```bash
-tail -n 20 ~/.openclaw/workspace/logs/skills/01-run-python.jsonl
-```
-
 ## Skill 配置後の認識確認
 
 1. 利用可能な Skill 一覧を表示する
@@ -92,18 +82,11 @@ openclaw skills check
 openclaw skills check --verbose
 ```
 
-確認ポイント:
+確認観点:
 
 - `01-run-python` が一覧に表示されること
 - `skills info` で `SKILL.md` の情報が取得できること
 - `skills check` で ready として扱われること
-
-表示されない場合の確認項目:
-
-- ディレクトリが `skills/01-run-python/` になっているか
-- `SKILL.md` がその直下にあるか
-- `SKILL.md` の frontmatter が壊れていないか
-- `name` や説明の記述に不整合がないか
 
 ## 共通テスト手順
 
@@ -174,16 +157,10 @@ openclaw dashboard --no-open
 - ブラウザ上でリンクを開けること
 - チャット応答が補足情報を付ける場合でも、元の Skill 仕様は `query` と `map_url` を返すだけであることを意識すること
 
-Web の Chat に入力する例:
+Web の Chat に入力する代表例:
 
 ```text
-/skill 01-run-python 東京駅
-```
-
-または:
-
-```text
-/skill 01-run-python 東京をGoogleマップで見たい
+/skill 01-run-python 東京駅を検索して。生のJSONとして query と map_url を返して。
 ```
 
 確認できたと言える条件:
@@ -193,23 +170,11 @@ Web の Chat に入力する例:
 - `map_url` が `https://www.google.com/maps/search/?api=1&query=...` の形式になっていること
 - `query` が入力した地名に対応していること
 
-「Skill と Script が起動した」とは言い切れない例:
+判定しにくい例:
 
 - 単に Google Maps のリンクだけが自然文で返る
-- `label`, `center`, `zoom` など仕様外の情報だけが目立つ
+- `label`, `center`, `zoom` など仕様外の情報が主になっている
 - `query` と `map_url` が見えず、チャットが要約だけ返している
-
-判定を明確にしたい場合の入力例:
-
-```text
-/skill 01-run-python 東京駅を検索して。生のJSONとして query と map_url を返して。
-```
-
-この入力を使う理由:
-
-- Skill 名を固定できる
-- JSON の確認対象を `query` と `map_url` に絞れる
-- UI 側の補足整形が入っても、仕様どおりの返答か見分けやすい
 
 ### 4. Discord からのテスト
 
@@ -223,7 +188,4 @@ Discord 連携の設定は完了済みである前提です。
 ## 補足
 
 この Skill は「地名を確定する」ものではなく、「Google Maps の検索 URL を返す」ものです。
-サンプルの具体的な用途と出力例は [skills/01-run-python/README.md](skills/01-run-python/README.md)、生成プロンプト例は [docs/01-run-python.md](docs/01-run-python.md) を参照してください。
-
-特に WebDashboard やチャット経由の返答は、UI 側や会話応答で補足整形されることがあります。
-そのため、厳密な動作確認はスクリプトの生出力 JSON を基準に行うのが安全です。
+用途と出力例は [skills/01-run-python/README.md](skills/01-run-python/README.md)、生成プロンプト例は [docs/01-run-python.md](docs/01-run-python.md) を参照してください。

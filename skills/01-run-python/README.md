@@ -9,22 +9,11 @@
 - 返却値を JSON で返す
 - Python 標準ライブラリだけで動かす
 
-## 想定する利用場面
-
-- 東京駅を Google Maps で開きたい
-- 大阪城の地図 URL を返したい
-- Discord や TUI から場所検索用の URL だけを簡潔に返したい
-
 ## 関連文書
 
 - [../../README.md](../../README.md): リポジトリ全体の導入、配置、認識確認、共通テスト手順
 - [SKILL.md](SKILL.md): OpenClaw が実行時に参照する Skill 定義
 - [../../docs/01-run-python.md](../../docs/01-run-python.md): TUI 用プロンプト例と設計メモ
-
-## ファイル構成
-
-- `SKILL.md`: Skill の用途、実行方法、返答方針を定義する
-- `scripts/place_to_gmap.py`: 入力文字列から Google Maps 検索 URL を生成する
 
 ## 最小実行例
 
@@ -44,22 +33,16 @@ python3 skills/01-run-python/scripts/place_to_gmap.py 東京駅
 {"ok": true, "query": "東京駅", "map_url": "https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%A7%85"}
 ```
 
-## 動作確認の観点
-
-このサンプルの確認では、Google Maps 上でどの候補が開くかまでは評価対象にしません。
-確認すべきなのは、スクリプトが次の最小 JSON 契約を守っているかです。
+## 確認する項目
 
 - `ok`
 - `query`
 - `map_url`
 
-逆に、`label`、`center`、`zoom` のような追加情報はこのサンプルの仕様外です。
-WebDashboard やチャットで補足情報つきに見える場合があっても、スクリプト本体の仕様確認とは分けて扱います。
+`label`、`center`、`zoom` のような追加情報はこのサンプルの仕様外です。
 
 ## 補足
 
-- 実行時の応答方針や Safety Defaults は [SKILL.md](SKILL.md) に記載しています
-- このサンプルを OpenClaw TUI で生成するための指示例は [../../docs/01-run-python.md](../../docs/01-run-python.md) にまとめています
 - スクリプトの実行ログは標準エラーに JSON Lines で出力されます
 - 既定では `~/.openclaw/workspace/logs/skills/01-run-python.jsonl` にも追記されます
 
