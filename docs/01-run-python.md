@@ -15,7 +15,7 @@
 
 - 地名や施設名を受け取り、Google Maps の検索 URL を返す
 - 返却は JSON とする
-- JSON には `ok`, `query`, `map_url` を含める
+- JSON には `ok`, `execution_id`, `query`, `map_url` を含める
 - `SKILL.md` の frontmatter の `name` は `01-run-python` にする
 - Python 標準ライブラリのみ使う
 - 地名未指定時はエラー JSON を返す
@@ -72,7 +72,7 @@ skills/01-run-python/ に OpenClaw の skill を作って。
 
 要件:
 - 地名から Google Maps 検索 URL を作る
-- JSON で ok, query, map_url を返す
+- JSON で ok, execution_id, query, map_url を返す
 - SKILL.md の name は 01-run-python
 - Python 標準ライブラリのみ使う
 - 地名未指定時はエラー JSON を返す

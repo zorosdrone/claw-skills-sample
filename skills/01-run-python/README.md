@@ -30,12 +30,13 @@ python3 skills/01-run-python/scripts/place_to_gmap.py 東京駅
 ## 出力例
 
 ```json
-{"ok": true, "query": "東京駅", "map_url": "https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%A7%85"}
+{"ok": true, "execution_id": "9f7a6b6a99ab4bf0bde2f835428b0e2f", "query": "東京駅", "map_url": "https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%A7%85"}
 ```
 
 ## 確認する項目
 
 - `ok`
+- `execution_id`
 - `query`
 - `map_url`
 
@@ -45,6 +46,7 @@ python3 skills/01-run-python/scripts/place_to_gmap.py 東京駅
 
 - スクリプトの実行ログは標準エラーに JSON Lines で出力されます
 - 既定では `~/.openclaw/workspace/logs/skills/01-run-python.jsonl` にも追記されます
+- `execution_id` は標準出力 JSON とログの両方に入り、同一実行の突合に使えます
 
 ## ログの確認方法
 
@@ -64,6 +66,12 @@ tail -f ~/.openclaw/workspace/logs/skills/01-run-python.jsonl
 
 ```bash
 grep '"stage": "error"' ~/.openclaw/workspace/logs/skills/01-run-python.jsonl
+```
+
+特定の実行を追う:
+
+```bash
+grep '"execution_id": "<応答に出た execution_id>"' ~/.openclaw/workspace/logs/skills/01-run-python.jsonl
 ```
 
 保存先を変えたい場合:

@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import sys
+import uuid
 from urllib.parse import quote_plus
 
 
@@ -27,12 +28,14 @@ def resolve_log_file_path(explicit_path: str | None) -> Path | None:
 
 
 class EventLogger:
-    def __init__(self, log_file_path: Path | None) -> None:
+    def __init__(self, log_file_path: Path | None, execution_id: str) -> None:
         self.log_file_path = log_file_path
+        self.execution_id = execution_id
 
     def emit(self, stage: str, **fields: object) -> None:
         log_record = {
             "ts": datetime.now(timezone.utc).isoformat(),
+            "execution_id": self.execution_id,
             "stage": stage,
         }
         if fields:
@@ -53,6 +56,7 @@ class EventLogger:
                 json.dumps(
                     {
                         "ts": datetime.now(timezone.utc).isoformat(),
+                        "execution_id": self.execution_id,
                         "stage": "log_write_error",
                         "error": str(exc),
                         "log_file": str(self.log_file_path),
@@ -108,16 +112,18 @@ def resolve_query(args: argparse.Namespace) -> str:
 
 
 def main() -> int:
+    execution_id = uuid.uuid4().hex
     try:
         args = parse_args()
         log_file_path = None if args.no_file_log else resolve_log_file_path(args.log_file)
-        logger = EventLogger(log_file_path=log_file_path)
+        logger = EventLogger(log_file_path=log_file_path, execution_id=execution_id)
         logger.emit("start", argv=sys.argv[1:], log_file=str(log_file_path) if log_file_path else None)
         logger.emit("args_parsed", has_query=bool(args.query), terms=args.terms)
         query = resolve_query(args)
         logger.emit("query_resolved", query=query)
         output = {
             "ok": True,
+            "execution_id": execution_id,
             "query": query,
             "map_url": build_map_url(query),
         }
@@ -125,12 +131,13 @@ def main() -> int:
         print(json.dumps(output, ensure_ascii=False))
         return 0
     except Exception as exc:
-        logger = EventLogger(log_file_path=resolve_log_file_path(None))
+        logger = EventLogger(log_file_path=resolve_log_file_path(None), execution_id=execution_id)
         logger.emit("error", error=str(exc))
         print(
             json.dumps(
                 {
                     "ok": False,
+                    "execution_id": execution_id,
                     "error": str(exc),
                     "hint": "例: python3 skills/01-run-python/scripts/place_to_gmap.py --query '東京駅'",
                 },

@@ -117,6 +117,7 @@ python3 skills/01-run-python/scripts/place_to_gmap.py --query "東京駅"
 確認観点:
 
 - `ok`, `query`, `map_url` の 3 つが返ること
+- `execution_id` が返ること
 - `query` が入力値と一致すること
 - `map_url` が Google Maps 検索 URL 形式になっていること
 - 仕様にない `label`, `center`, `zoom` などを返していないこと
@@ -127,6 +128,7 @@ python3 skills/01-run-python/scripts/place_to_gmap.py --query "東京駅"
 - URL が開けるだけでは、Skill の実装どおりに動いた確認としては不十分
 - 実行ログは `~/.openclaw/workspace/logs/skills/01-run-python.jsonl` に追記される
 - 運用中に確認するときは `tail -f ~/.openclaw/workspace/logs/skills/01-run-python.jsonl` を使う
+- 真にスクリプトが走ったかは、応答の `execution_id` がログ内の `execution_id` と一致するかで確認する
 
 ### 2. TUI からのテスト
 
@@ -157,6 +159,12 @@ openclaw dashboard --no-open
 - ブラウザ上でリンクを開けること
 - チャット応答が補足情報を付ける場合でも、元の Skill 仕様は `query` と `map_url` を返すだけであることを意識すること
 
+注意:
+
+- 自然文だけの入力は、モデルが Skill を使わずに直接返答することがある
+- `大阪城の地図URLを出して` のような文は、意図としては一致していても Skill 実行の保証にはならない
+- Skill 実行を確実に確認したい場合は `/skill 01-run-python ...` を使う
+
 Web の Chat に入力する代表例:
 
 ```text
@@ -166,15 +174,17 @@ Web の Chat に入力する代表例:
 確認できたと言える条件:
 
 - `01-run-python` を明示して呼んでいること
-- 返答の中に `query` と `map_url` が含まれること
+- 返答の中に `execution_id`, `query`, `map_url` が含まれること
 - `map_url` が `https://www.google.com/maps/search/?api=1&query=...` の形式になっていること
 - `query` が入力した地名に対応していること
+- 返答の `execution_id` でログを grep すると一致する行が見つかること
 
 判定しにくい例:
 
 - 単に Google Maps のリンクだけが自然文で返る
 - `label`, `center`, `zoom` など仕様外の情報が主になっている
 - `query` と `map_url` が見えず、チャットが要約だけ返している
+- `execution_id` が返っていても、同じ値がログに存在しない
 
 ### 4. Discord からのテスト
 
