@@ -50,6 +50,22 @@ skills/
 - OpenClaw CLI で参照する Skill 名は `SKILL.md` の frontmatter の `name` を使う
 - フォルダ名と `name` は一致させると管理しやすい
 
+Workspace の skills へ上書き反映するには:
+
+```bash
+scripts/sync_skill_to_workspace.sh 01-run-python
+```
+
+このスクリプトは、リポジトリ側の `skills/<skill_name>/SKILL.md` と `skills/<skill_name>/scripts/` を `~/.openclaw/workspace/skills/<skill_name>/` に上書きコピーします。
+
+リポジトリ側で `SKILL.md` や `scripts/` を変更した後は、テスト前に必ずこの同期を再実行します。
+
+同期後にログファイルを確認する例:
+
+```bash
+tail -n 20 ~/.openclaw/workspace/logs/skills/01-run-python.jsonl
+```
+
 ## Skill 配置後の認識確認
 
 1. 利用可能な Skill 一覧を表示する
