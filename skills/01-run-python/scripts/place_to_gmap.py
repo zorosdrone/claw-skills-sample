@@ -54,7 +54,7 @@ def main() -> int:
                 {
                     "ok": False,
                     "error": str(exc),
-                    "hint": "例: python3 skills/01_run_python/scripts/place_to_gmap.py --query '東京駅'",
+                    "hint": "例: python3 skills/01-run-python/scripts/place_to_gmap.py --query '東京駅'",
                 },
                 ensure_ascii=False,
             )

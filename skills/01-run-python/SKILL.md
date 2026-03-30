@@ -1,5 +1,5 @@
 ---
-name: 01_run_python
+name: 01-run-python
 description: 地名や施設名から Google Maps の検索 URL を生成して JSON で返す Skill。場所を地図で開きたい依頼に使う。
 ---
 
@@ -24,13 +24,13 @@ description: 地名や施設名から Google Maps の検索 URL を生成して 
 基本形:
 
 ```bash
-python3 skills/01_run_python/scripts/place_to_gmap.py --query "東京駅"
+python3 skills/01-run-python/scripts/place_to_gmap.py --query "東京駅"
 ```
 
 位置引数でも実行できる:
 
 ```bash
-python3 skills/01_run_python/scripts/place_to_gmap.py 東京駅
+python3 skills/01-run-python/scripts/place_to_gmap.py 東京駅
 ```
 
 ## Expected Output
@@ -53,7 +53,7 @@ python3 skills/01_run_python/scripts/place_to_gmap.py 東京駅
 {
   "ok": false,
   "error": "place name is required",
-  "hint": "例: python3 skills/01_run_python/scripts/place_to_gmap.py --query '東京駅'"
+  "hint": "例: python3 skills/01-run-python/scripts/place_to_gmap.py --query '東京駅'"
 }
 ```
 

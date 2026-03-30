@@ -3,8 +3,8 @@ TUIへのコマンド
 地名からGoogleMapを検索してヒットした場所を開くURLを返す。SKILLを作って。
 
 作成したサンプル:
-- skill_samples/01_run_python/SKILL.md
-- skill_samples/01_run_python/scripts/place_to_gmap.py
+- skills/01-run-python/SKILL.md
+- skills/01-run-python/scripts/place_to_gmap.py
 
 概要:
 - 地名や施設名を受け取り、Google Maps の検索 URL を JSON で返す
@@ -14,7 +14,7 @@ TUIへのコマンド
 実行例:
 
 ```bash
-python3 skills/01_run_python/scripts/place_to_gmap.py --query "東京駅"
+python3 skills/01-run-python/scripts/place_to_gmap.py --query "東京駅"
 ```
 
 想定出力:
@@ -26,7 +26,7 @@ python3 skills/01_run_python/scripts/place_to_gmap.py --query "東京駅"
 SKILL.md の解説:
 
 - `---` から `---` までの frontmatter は、OpenClaw が Skill を識別するためのメタ情報
-- `name: 01_run_python` はフォルダー名と一致させる必要がある
+- `name: 01-run-python` はフォルダー名と一致させると管理しやすい
 - `description` には、この Skill をどんな依頼で使うかを書く
 
 各セクションの役割:
@@ -63,17 +63,17 @@ OpenClaw TUI に貼るプロンプト例:
 
 ```text
 OpenClaw の skill を作って。
-配置先は skills/01_run_python/ にして。
+配置先は skills/01-run-python/ にして。
 
 必要ファイル:
-- skills/01_run_python/SKILL.md
-- skills/01_run_python/scripts/place_to_gmap.py
+- skills/01-run-python/SKILL.md
+- skills/01-run-python/scripts/place_to_gmap.py
 
 要件:
 - 地名や施設名を受け取り、Google Maps の検索 URL を返す
 - 返却は JSON にする
 - JSON には `ok`, `query`, `map_url` を含める
-- `SKILL.md` の frontmatter の `name` は `01_run_python` にする
+- `SKILL.md` の frontmatter の `name` は `01-run-python` にする
 - Python 標準ライブラリのみ使う
 - URL エンコードを行う
 - 地名が未指定ならエラー JSON を返す
@@ -97,7 +97,7 @@ Python スクリプトの仕様:
 
 このプロンプトが通りやすい理由:
 
-- 配置先を `skills/01_run_python/` まで明示している
+- 配置先を `skills/01-run-python/` まで明示している
 - 必要ファイルを先に固定している
 - `name` とフォルダー名の一致条件を明示している
 - JSON のキーを固定して、出力ぶれを減らしている
@@ -112,16 +112,16 @@ Python スクリプトの仕様:
 OpenClaw TUI 用の短いプロンプト例:
 
 ```text
-skills/01_run_python/ に OpenClaw の skill を作って。
+skills/01-run-python/ に OpenClaw の skill を作って。
 
 必要ファイル:
-- skills/01_run_python/SKILL.md
-- skills/01_run_python/scripts/place_to_gmap.py
+- skills/01-run-python/SKILL.md
+- skills/01-run-python/scripts/place_to_gmap.py
 
 要件:
 - 地名から Google Maps 検索 URL を作る
 - JSON で `ok`, `query`, `map_url` を返す
-- `SKILL.md` の `name` は `01_run_python`
+- `SKILL.md` の `name` は `01-run-python`
 - Python 標準ライブラリのみ使う
 - 地名未指定時はエラー JSON を返す
 
@@ -132,14 +132,14 @@ Discord 経由を意識したプロンプト例:
 
 ```text
 Discord から使いやすい OpenClaw の skill を作って。
-配置先は skills/01_run_python/ 。
+配置先は skills/01-run-python/ 。
 
 目的:
 - 地名を受け取って Google Maps の URL を返す
 
 必要ファイル:
-- skills/01_run_python/SKILL.md
-- skills/01_run_python/scripts/place_to_gmap.py
+- skills/01-run-python/SKILL.md
+- skills/01-run-python/scripts/place_to_gmap.py
 
 仕様:
 - 入力は地名や施設名
@@ -147,7 +147,7 @@ Discord から使いやすい OpenClaw の skill を作って。
 - JSON は `ok`, `query`, `map_url` を含める
 - エラー時は短い理由を返す
 - Python 標準ライブラリのみ使う
-- `SKILL.md` の `name` はフォルダー名と同じ `01_run_python`
+- `SKILL.md` の `name` はフォルダー名と同じ `01-run-python`
 
 Discord での返答方針も `SKILL.md` に書いて。
 簡潔でぶれない最小構成にして。
