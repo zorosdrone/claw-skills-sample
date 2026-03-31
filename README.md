@@ -9,6 +9,7 @@ OpenClaw の Skill 学習用プロジェクトです。
 - [skills/01-run-python/README.md](skills/01-run-python/README.md): `01-run-python` サンプルの概要、入出力、実行例
 - [skills/01-run-python/SKILL.md](skills/01-run-python/SKILL.md): OpenClaw が実行時に参照する Skill 定義本体
 - [docs/01-run-python.md](docs/01-run-python.md): `01-run-python` を生成するための TUI プロンプト例と設計メモ
+- [docs/03-openclaw-cli.md](docs/03-openclaw-cli.md): `openclaw agent` の最小実行例と、よくある引数ミスの切り分け
 
 ## サンプル一覧
 
